@@ -9,6 +9,9 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/labstack/echo/v5"
 	"github.com/struckchure/gx"
+	"github.com/struckchure/gx/adapters"
+	"github.com/struckchure/gx/samples/echo/dto"
+	"github.com/struckchure/gx/samples/echo/types"
 )
 
 type Request struct {
@@ -24,22 +27,37 @@ type Response struct {
 func main() {
 	e := echo.New()
 
-	gx.Setup("messages")
+	gx.GxSetup("GX + Echo")
 
-	gx.Doc[gx.None](e.GET("/", func(c *echo.Context) error {
+	adapters.EchoV5R(e.GET("/", func(c *echo.Context) error {
 		return c.String(200, "Hello")
 	})).
 		HasResponseModel(http.StatusOK, rest.ModelOf[string]())
 
-	gx.Doc[Request](e.POST("/:three", func(c *echo.Context) error {
+	adapters.EchoV5R(e.POST("/:three", func(c *echo.Context) error {
 		return c.JSON(200, Response{Ok: true})
 	})).
-		HasResponseModel(http.StatusOK, rest.ModelOf[Response]()).
+		HasRequestModel(rest.ModelOf[Request]()).
+		HasResponseModel(http.StatusOK, rest.ModelOf[[]Response]()).
 		HasTags([]string{"numbers"})
 
-	spec := gx.Generate(func(spec *openapi3.T) {
+	adapters.EchoV5R(e.POST("/:three/4", func(c *echo.Context) error {
+		return c.JSON(200, Response{Ok: true})
+	})).
+		HasRequestModel(rest.ModelOf[dto.Request]()).
+		HasResponseModel(http.StatusOK, rest.ModelOf[dto.Response]()).
+		HasTags([]string{"numbers"})
+
+	adapters.EchoV5R(e.POST("/:three/5", func(c *echo.Context) error {
+		return c.JSON(200, Response{Ok: true})
+	})).
+		HasRequestModel(rest.ModelOf[Request]()).
+		HasResponseModel(http.StatusOK, rest.ModelOf[types.Response]()).
+		HasTags([]string{"numbers"})
+
+	spec := gx.GxGenerate(func(spec *openapi3.T) {
 		spec.Info.Version = "v1.0.0"
-		spec.Info.Description = "Messages API"
+		spec.Info.Description = "This was generated using Gx (powered by <a href='https://github.com/a-h/rest'>a-h/rest</a>) and Echo v5"
 	})
 
 	// Attach the UI handler.

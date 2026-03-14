@@ -6,6 +6,7 @@ require (
 	github.com/a-h/rest v0.0.0-20240504113546-6729b3328f85
 	github.com/getkin/kin-openapi v0.124.0
 	github.com/labstack/echo/v5 v5.0.4
+	github.com/samber/lo v1.53.0
 )
 
 require (
@@ -24,3 +25,5 @@ require (
 	golang.org/x/tools v0.42.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/a-h/rest => github.com/struckchure/rest v0.0.0-20260314111915-01c5dd097aff
