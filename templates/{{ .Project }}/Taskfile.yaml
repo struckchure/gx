@@ -1,0 +1,60 @@
+version: "3"
+
+tasks:
+  db:
+    dir: ./server
+    cmd: go run -mod=mod entgo.io/ent/cmd/ent {{.CLI_ARGS}}
+
+  db:diff:
+    dir: ./server
+    cmds:
+      - atlas migrate diff
+        --dir "file://ent/migrate/migrations"
+        --to "ent://ent/schema"
+        --dev-url "docker://postgres/17-alpine/test?search_path=public"
+      - task: db:migrate
+      - task: db:gen
+
+  db:migrate:
+    dir: ./server
+    dotenv:
+      - .env
+    cmd: atlas migrate apply
+      --revisions-schema public
+      --dir "file://ent/migrate/migrations"
+      --url $DATABASE_URL
+
+  db:status:
+    dir: ./server
+    dotenv:
+      - .env
+    cmd: atlas migrate status
+      --dir "file://ent/migrate/migrations"
+      --url $DATABASE_URL
+
+  db:gen:
+    dir: ./server
+    cmd: go generate ./ent
+
+  test:
+    dir: ./server
+    cmds:
+      - go test ./services -v
+      - go test ./handlers -v
+      - go test ./e2e -v
+
+  docs:gen:
+    dir: ./client
+    cmd: bun run kubb:gen
+
+  server:
+    dir: ./server
+    cmd: air
+
+  client:
+    dir: ./client
+    cmd: bun run dev
+
+  dev:
+    silent: true
+    cmd: task -p server client

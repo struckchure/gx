@@ -1,0 +1,74 @@
+# yaml-language-server: $schema=https://hay-kot.github.io/scaffold/schema.json
+
+questions:
+  - name: "description"
+    prompt:
+      message: "Description of the project"
+    validate:
+      required: false
+
+  - name: "module_name"
+    prompt:
+      message: "Module name (github.com/struckchure/gx-app)"
+      validate:
+        required: true
+
+  - name: "server_framework"
+    prompt:
+      message: "HTTP server framework"
+      default: "Echo v5"
+      options:
+        - "Echo v5"
+        - "Echo v4"
+
+  - name: "use_di"
+    prompt:
+      confirm: "Would you like to use Depency Injection (using https://github.com/samber/do)?"
+      default: "yes"
+
+  - name: "database"
+    prompt:
+      message: "Select database"
+      default: "PostgreSQL"
+      options:
+        - "PostgreSQL"
+        - "MySQL"
+        - "None"
+
+  - name: "database_orm"
+    prompt:
+      message: "Select ORM"
+      default: "GORM"
+      options:
+        - "GORM"
+        - "EntGo"
+        - "None"
+
+  - name: "use_docker_compose"
+    prompt:
+      confirm: "Would you like to use Docker Compose?"
+      default: "yes"
+
+  - name: "client_framework"
+    prompt:
+      message: "Frontend framework"
+      default: "Svelte 5"
+      options:
+        - "Svelte 5"
+
+  - name: "client_pkgm"
+    prompt:
+      message: "Select package manager"
+      default: "bun"
+      options:
+        - "Bun"
+        - "Yarn"
+        - "NPM"
+
+  - name: "task_runner"
+    prompt: "Select task runner"
+    default: "Taskfile"
+    options:
+      - "Taskfile"
+      - "Makefile"
+      - "None"
