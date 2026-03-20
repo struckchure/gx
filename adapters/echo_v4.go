@@ -5,7 +5,7 @@ import (
 	"github.com/struckchure/gx"
 )
 
-func EchoV4R(info echo.Route) *gx.GxRoute {
+func EchoV4R(info *echo.Route) *gx.GxRoute {
 	gx.ErrorIfNotApi()
 
 	route := gx.Api.Route(info.Method, formatEchoUrlToOpenApi(info.Path))
